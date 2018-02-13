@@ -15,6 +15,7 @@ class App extends React.Component {
     sbooks:[]
   }
   showSearchedBooks=(query)=>{
+    this.setState({sbooks:[]})
     if(query)
       BooksAPI.search(query).then(res=>{
         if(res.length){
@@ -24,6 +25,7 @@ class App extends React.Component {
                 sbooks:this.state.sbooks.concat([ books ])
               }))
             })
+            return 0
           })
         }
   })}
@@ -46,6 +48,7 @@ class App extends React.Component {
             crBooks:this.state.crBooks.concat([ book ])
           }))
         }
+        return 0
       })
     })
   }

@@ -1,18 +1,20 @@
 import React , {Component} from 'react'
 import { Link } from 'react-router-dom'
+import { DebounceInput } from 'react-debounce-input'
 class SearchBooks extends Component{
   state={
     query:'',
   }
     render()
     {
-      let showingBooks=this.props.sBooks
+      let showingBooks=this.props.sbooks
         return(
           <div className="search-books">
             <div className="search-books-bar">
               <Link className="close-search" to="/" >Close</Link>
               <div className="search-books-input-wrapper">
-                 <input type="text" placeholder="Search by title or author"
+                 <DebounceInput type="text" placeholder="Search by title or author" 
+                  debounceTimeout={3000}
                   onChange={(event)=>this.props.onGenerateQuery(event.target.value)}/>
               </div>
             </div>
@@ -22,14 +24,13 @@ class SearchBooks extends Component{
                 <li key={book.id} className='book-list-item'>
                   <div className="book">
                     <div className="book-top">
-                      {book.imageLinks!==undefined &&(
                         <div className="book-cover" style={{ 
                          width: 128,
                          height: 193,
-                         backgroundImage: `url(${book.imageLinks.thumbnail})`
+                         backgroundImage:`url(${book.imageLinks && book.imageLinks.thumbnail?`
+                         ${book.imageLinks.thumbnail}`:`http://via.placeholder.com/128x193?text=No%20Cover`})`
                            }}>
                         </div>
-                            )}
                         <div className="book-shelf-changer">
                           <select
                             defaultValue={book.shelf}
@@ -50,7 +51,11 @@ class SearchBooks extends Component{
                             <option value="read">✔Read</option>
                             ):(<option value="read">Read</option>)
                             }
-                            <option value="none">None</option>
+                            {
+                            book.shelf==="none" ?(
+                            <option value="none">✔None</option>
+                            ):(<option value="none">None</option>)
+                            }
                           </select>
                         </div>
                       </div>
